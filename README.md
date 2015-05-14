@@ -7,7 +7,7 @@
 ## Example Setup
 
 1. Clone the repo and drag the Classes folder into your project. This should include VAProgressCircle.h/.m, and UIProgressLabel.h/.m
-2. Either create a VAProgressCircle using the `- (id)initWithFrame:(CGRect)frame` method or you can drag and drop a UIView into your Interface Builder, subclass it to VAProgressCircle, and link it up to a property in your UIViewController
+2. Either create a VAProgressCircle using the `- (id)initWithFrame:(CGRect)frame` method or drag and drop a UIView into your Interface Builder, subclass it to VAProgressCircle, and link it up to a property in your UIViewController
 
 Here is the snippet of code slightly modified from the example app included in the repo. This shows how to initalize and add a VAProgressChart to your UIViewController using `- (id)initWithFrame:(CGRect)frame`
 
