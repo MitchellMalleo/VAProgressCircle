@@ -58,7 +58,7 @@
 
 - (void)addChart
 {
-    self.circleChart = [[VAProgressCircle alloc] initWithFrame:CGRectMake(50, 60, 250, 250)];
+    self.circleChart = [[VAProgressCircle alloc] initWithFrame:CGRectMake(80, 80, 200, 200)];
     self.circleChart.center = CGPointMake(self.view.center.x, self.circleChart.center.y);
     [self setPrimaryColorForChart];
     [self setTransitionColorForChart];

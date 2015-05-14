@@ -500,7 +500,7 @@ typedef enum{
         
         if(self.transitionType == VAProgressCircleColorTransitionTypeGradual && self.shouldHighlightProgress)
         {
-            progressLayer.strokeColor = [self transitionFromColor:self.circleHighlightColor toColor:self.circleHighlightTransitionColor WithProgress:[current floatValue]].CGColor;
+            progressLayer.strokeColor = [[self transitionFromColor:self.circleHighlightColor toColor:self.circleHighlightTransitionColor WithProgress:[current floatValue]] colorWithAlphaComponent:0.8f].CGColor;
         }
         else if(self.shouldHighlightProgress)
         {
