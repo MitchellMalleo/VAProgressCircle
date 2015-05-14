@@ -1,8 +1,9 @@
 # VAProgressCircle
 
-![](https://github.com/MitchellMalleo/VAProgressChart/blob/master/vaProgressCircle.gif)
+![](https://github.com/MitchellMalleo/VAProgressCircle/blob/master/vaProgressCircle.gif)
 
 ---
+
 ## Example Setup
 
 1. Clone the repo and drag the Classes folder into your project. This should include VAProgressCircle.h/.m, and UIProgressLabel.h/.m
