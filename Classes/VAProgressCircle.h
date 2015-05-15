@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
-
 #define VADefaultGreen [UIColor colorWithRed:35.0/255.0 green:177.0/255.0 blue:70.0/255.0 alpha:1.0f]
 #define VADefaultHighlightGreen [UIColor colorWithRed:35.0/255.0 green:177.0/255.0 blue:70.0/255.0 alpha:0.8f]
 
@@ -20,6 +18,11 @@ typedef enum{
     VAProgressCircleColorTransitionTypeGradual,
     VAProgressCircleColorTransitionTypeNone
 } VAProgressCircleColorTransitionType;
+
+typedef enum{
+    VAProgressCircleRotationDirectionClockwise,
+    VAProgressCircleRotationDirectionCounterClockwise
+} VAProgressCircleRotationDirection;
 
 @interface VAProgressCircle : UIView <UIApplicationDelegate>
 
@@ -48,6 +51,7 @@ typedef enum{
 @property BOOL shouldHighlightProgress;
 @property BOOL shouldNumberLabelTransition;
 
-@property VAProgressCircleColorTransitionType transitionType;
+@property (nonatomic) VAProgressCircleColorTransitionType transitionType;
+@property (nonatomic) VAProgressCircleRotationDirection rotationDirection;
 
 @end

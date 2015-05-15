@@ -65,6 +65,7 @@
     [self setTransitionTypeForChart];
     
     [self.view addSubview:self.circleChart];
+    self.circleChart.rotationDirection = VAProgressCircleRotationDirectionClockwise;
 }
 
 - (void)randomIncrement
@@ -197,9 +198,6 @@
 
 - (IBAction)increaseButtonWasTouched:(id)sender
 {
-    [self setPrimaryColorForChart];
-    [self setTransitionColorForChart];
-    [self setTransitionTypeForChart];
     [self addProgress];
 }
 

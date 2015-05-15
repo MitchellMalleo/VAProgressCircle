@@ -42,6 +42,9 @@ Functions similar to `- (void)setTransitionColor:(UIColor *)transitionColor` but
 ##### VAProgressCircleColorTransitionType transitionType <br/>
 Should be set to `VAProgressCircleColorTransitionTypeGradual` if you want the spinner to transition to a second color as it approaches 100%. Defaults to `VAProgressCircleColorTransitionTypeNone`
 
+##### VAProgressCircleRotationDirection rotationDirection <br/>
+Designates which way the progress will rotate around the VAProgressChart. Defaults to `VAProgressCircleRotationDirectionCounterClockwise`
+
 ##### float animationSpeed <br/>
 Designates how fast the animation should animate. Defaults to `1.0f`
 

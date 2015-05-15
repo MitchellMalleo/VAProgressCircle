@@ -9,6 +9,8 @@
 #import "VAProgressCircle.h"
 #import "UIProgressLabel.h"
 
+#define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
+
 #define kName @"name"
 #define kLayer @"layer"
 #define kLine @"line"
@@ -105,6 +107,7 @@ typedef enum{
     self.shouldNumberLabelTransition = YES;
     
     self.transitionType = VAProgressCircleColorTransitionTypeNone;
+    self.rotationDirection = VAProgressCircleRotationDirectionCounterClockwise;
     
     self.progressPieceArray = [[NSMutableArray alloc] init];
 }
@@ -152,6 +155,19 @@ typedef enum{
 }
 
 #pragma mark - Public Methods
+
+- (void)setRotationDirection:(VAProgressCircleRotationDirection)rotationDirection
+{
+    if(_rotationDirection != rotationDirection)
+    {
+        [self invertPathToOppositrRotationDirection:self.backgroundCirclePath];
+        [self invertPathToOppositrRotationDirection:self.innerBackgroundPath];
+        [self invertPathToOppositrRotationDirection:self.outerBackgroundPath];
+        [self invertPathToOppositrRotationDirection:self.numberViewPath];
+        
+        _rotationDirection = rotationDirection;
+    }
+}
 
 - (void)setColor:(UIColor *)color
 {
@@ -324,6 +340,14 @@ typedef enum{
 }
 
 #pragma mark - Private Methods
+
+- (void)invertPathToOppositrRotationDirection:(UIBezierPath *)path
+{
+    CGAffineTransform mirrorOverXOrigin = CGAffineTransformMakeScale(-1.0f, 1.0f);
+    CGAffineTransform translate = CGAffineTransformMakeTranslation(self.frame.size.width, 0);
+    [path applyTransform:mirrorOverXOrigin];
+    [path applyTransform:translate];
+}
 
 - (UIColor *)colorConvertedToRGBA:(UIColor *)colorToConvert;
 {
