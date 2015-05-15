@@ -160,10 +160,10 @@ typedef enum{
 {
     if(_rotationDirection != rotationDirection)
     {
-        [self invertPathToOppositrRotationDirection:self.backgroundCirclePath];
-        [self invertPathToOppositrRotationDirection:self.innerBackgroundPath];
-        [self invertPathToOppositrRotationDirection:self.outerBackgroundPath];
-        [self invertPathToOppositrRotationDirection:self.numberViewPath];
+        [self invertPathToOppositeRotationDirection:self.backgroundCirclePath];
+        [self invertPathToOppositeRotationDirection:self.innerBackgroundPath];
+        [self invertPathToOppositeRotationDirection:self.outerBackgroundPath];
+        [self invertPathToOppositeRotationDirection:self.numberViewPath];
         
         _rotationDirection = rotationDirection;
     }
@@ -341,7 +341,7 @@ typedef enum{
 
 #pragma mark - Private Methods
 
-- (void)invertPathToOppositrRotationDirection:(UIBezierPath *)path
+- (void)invertPathToOppositeRotationDirection:(UIBezierPath *)path
 {
     CGAffineTransform mirrorOverXOrigin = CGAffineTransformMakeScale(-1.0f, 1.0f);
     CGAffineTransform translate = CGAffineTransformMakeTranslation(self.frame.size.width, 0);
