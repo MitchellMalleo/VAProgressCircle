@@ -65,7 +65,6 @@
     [self setTransitionTypeForChart];
     
     [self.view addSubview:self.circleChart];
-    self.circleChart.rotationDirection = VAProgressCircleRotationDirectionClockwise;
 }
 
 - (void)randomIncrement
