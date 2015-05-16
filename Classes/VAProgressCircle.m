@@ -93,12 +93,12 @@ typedef enum{
     self.circleColor = VADefaultGreen;
     self.accentLineColor = VADefaultGreen;
     self.numberLabelColor = VADefaultGreen;
-    self.circleHighlightColor= VADefaultHighlightGreen;
+    self.circleHighlightColor = [self colorConvertedToRGBA:VADefaultGreen isColorHighlightColor:YES];
     
     self.circleTransitionColor = VADefaultBlue;
     self.accentLineTransitionColor = VADefaultBlue;
     self.numberLabelTransitionColor = VADefaultBlue;
-    self.circleHighlightTransitionColor = VADefaultHighlightBlue;
+    self.circleHighlightTransitionColor = [self colorConvertedToRGBA:VADefaultBlue isColorHighlightColor:YES];
     
     self.finished = NO;
     self.shouldShowAccentLine = YES;
@@ -175,7 +175,7 @@ typedef enum{
     self.accentLineColor = color;
     self.numberLabelColor = color;
     self.numberLabel.textColor = self.numberLabelColor;
-    self.circleHighlightColor = [color colorWithAlphaComponent:0.8f];
+    self.circleHighlightColor = [self colorConvertedToRGBA:color isColorHighlightColor:YES];
 }
 
 - (void)setTransitionColor:(UIColor *)transitionColor
@@ -183,7 +183,7 @@ typedef enum{
     self.circleTransitionColor = transitionColor;
     self.accentLineTransitionColor = transitionColor;
     self.numberLabelTransitionColor = transitionColor;
-    self.circleHighlightTransitionColor = [transitionColor colorWithAlphaComponent:0.8f];
+    self.circleHighlightTransitionColor = [self colorConvertedToRGBA:transitionColor isColorHighlightColor:YES];
 }
 
 - (void)setColor:(UIColor *)color withHighlightColor:(UIColor *)highlightColor
@@ -349,7 +349,7 @@ typedef enum{
     [path applyTransform:translate];
 }
 
-- (UIColor *)colorConvertedToRGBA:(UIColor *)colorToConvert;
+- (UIColor *)colorConvertedToRGBA:(UIColor *)colorToConvert isColorHighlightColor:(BOOL)isHighlight;
 {
     CGFloat red;
     CGFloat green;
@@ -368,9 +368,19 @@ typedef enum{
     CGContextRelease(context);
     CGColorSpaceRelease(rgbColorSpace);
     
-    red = resultingPixel[0] / 255.0f;
-    green = resultingPixel[1] / 255.0f;
-    blue = resultingPixel[2] / 255.0f;
+    if(!isHighlight)
+    {
+        red = resultingPixel[0] / 255.0f;
+        green = resultingPixel[1] / 255.0f;
+        blue = resultingPixel[2] / 255.0f;
+    }
+    else
+    {
+        red = (resultingPixel[0] * 0.2 + resultingPixel[0]) / 255.0f;
+        green = (resultingPixel[1] * 0.2 + resultingPixel[1]) / 255.0f;
+        blue = (resultingPixel[2] * 0.2 + resultingPixel[2]) / 255.0f;
+    }
+    
     
     return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
@@ -383,8 +393,8 @@ typedef enum{
     {
         CGFloat progressPercentage = progress / 100;
         CGFloat progressPercentageInversion = 1 - progressPercentage;
-        originalColor = [self colorConvertedToRGBA:originalColor];
-        transitionColor = [self colorConvertedToRGBA:transitionColor];
+        originalColor = [self colorConvertedToRGBA:originalColor isColorHighlightColor:NO];
+        transitionColor = [self colorConvertedToRGBA:transitionColor isColorHighlightColor:NO];
         const CGFloat *colorComponents = CGColorGetComponents(originalColor.CGColor);
         const CGFloat *transitionColorComponents = CGColorGetComponents(transitionColor.CGColor);
     

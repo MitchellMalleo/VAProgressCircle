@@ -14,9 +14,11 @@ Here is the snippet of code slightly modified from the example app included in t
 	self.circleChart = [[VAProgressCircle alloc] initWithFrame:CGRectMake(50, 60, 250, 250)];
 	[self.view addSubview:self.circleChart];
 
-
 ## Documentation
 ___
+
+## General
+1. VAProgressChart only supports opaque colors at the current release. Using any non-opaque colors could cause unwanted behavior
 
 ## Methods
 
@@ -24,10 +26,10 @@ ___
 The bread and butter method. Takes the current state of the VAProgressCircle and updates the circle to the progress that was passed
 
 ##### - (void)setColor:(UIColor *)color <br/>
-Sets the color for all the relevant properties of the circle. This includes circleColor, accentLineColor, and numberLabelColor. Also sets the circleHighlightColor by taking the `(UIColor *)color` and making it slightly transparent
+Sets the color for all the relevant properties of the circle. This includes circleColor, accentLineColor, and numberLabelColor. Also sets the circleHighlightColor by taking the `(UIColor *)color` and making it 20% lighter
 
 ##### - (void)setTransitionColor:(UIColor * )transitionColor <br/>
-Sets the transition color for all the relevant properties of the circle. This includes circleTransitionColor, accentLineTransitionColor, and numberLabelTransitionColor. Also sets the circleHighlightTransitionColor by taking the `(UIColor *)transitionColor` and making it slightly transparent
+Sets the transition color for all the relevant properties of the circle. This includes circleTransitionColor, accentLineTransitionColor, and numberLabelTransitionColor. Also sets the circleHighlightTransitionColor by taking the `(UIColor *)transitionColor` and making it 20% lighter
 
 ##### - (void)setColor:(UIColor * )color withHighlightColor:(UIColor *)highlightColor <br/>
 Functions similar to `- (void)setColor:(UIColor *)color` but allows the specification of a highlightColor

@@ -99,7 +99,7 @@
         {
             if(self.circleChart.circleColor != VADefaultGreen)
             {
-                [self.circleChart setColor:VADefaultGreen withHighlightColor:VADefaultHighlightGreen];
+                [self.circleChart setColor:VADefaultGreen withHighlightColor:VADefaultGreen];
             }
         }
             break;
@@ -141,7 +141,7 @@
     switch (self.transitionColorSegmentedControl.selectedSegmentIndex)
     {
         case 0:
-            [self.circleChart setTransitionColor:VADefaultBlue withHighlightTransitionColor:VADefaultHighlightBlue];
+            [self.circleChart setTransitionColor:VADefaultBlue withHighlightTransitionColor:VADefaultBlue];
             break;
             
         case 1:

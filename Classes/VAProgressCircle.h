@@ -9,10 +9,8 @@
 #import <UIKit/UIKit.h>
 
 #define VADefaultGreen [UIColor colorWithRed:35.0/255.0 green:177.0/255.0 blue:70.0/255.0 alpha:1.0f]
-#define VADefaultHighlightGreen [UIColor colorWithRed:35.0/255.0 green:177.0/255.0 blue:70.0/255.0 alpha:0.8f]
 
 #define VADefaultBlue [UIColor colorWithRed:32.0/255.0 green:149.0/255.0 blue:242.0/255.0 alpha:1.0f]
-#define VADefaultHighlightBlue [UIColor colorWithRed:32.0/255.0 green:149.0/255.0 blue:242.0/255.0 alpha:0.8f]
 
 typedef enum{
     VAProgressCircleColorTransitionTypeGradual,
