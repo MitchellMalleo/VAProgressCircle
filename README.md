@@ -22,7 +22,6 @@ VAProgressCircle is a custom loading animation for loading iOS content from 0 to
     ```
 
 ## Usage
-<<<<<<< HEAD
 Set the base color of your VAProgressCircle.
 
 	[self.progressCircle setColor:[UIColor greenColor]];
@@ -51,39 +50,6 @@ Toggle animation features of the VAProgressCircle.
 	@property BOOL shouldNumberLabelTransition;
 
 Set the rotation direction of your VAProgressCircle.
-=======
-
-Customize your VAProgressCircle!
-
-The base color is set by using
-
-	[self.progressCircle setColor:[UIColor greenColor]];
-	
-	//Or you can specify a highlight color with your base color
-
-	[self.progressCircle setColor:[UIColor greenColor] withHighlightColor:VADefaultGreen];
-
-VAProgressCircle has the ability to transition from one color to another as it reaches 100%. This can be enabled by setting your `transitionType`
-
-	self.progressCircle.transitionType = VAProgressCircleColorTransitionTypeGradual;
-
-To set your transition color
-
-	[self.progressCircle setTransitionColor:[UIColor blueColor]];
-	
-	//Or you can specify a highlight color with your transition color
-
-	[self.progressCircle setColor:[UIColor blueColor] withHighlightTransitionColor:VADefaultBlue];	
-
-Turn off/on animation features of the VAProgressCircle
-
-	@property BOOL shouldShowAccentLine;
-	@property BOOL shouldShowFinishedAccentCircle;
-	@property BOOL shouldHighlightProgress;
-	@property BOOL shouldNumberLabelTransition;
-
-Set the rotation direction of your VAProgressCircle
->>>>>>> a906e8bf92b028fa4f1eba124f2715c5e0359ca3
 
 	self.progressCircle.rotationDirection = VAProgressCircleRotationDirectionClockwise;
 
