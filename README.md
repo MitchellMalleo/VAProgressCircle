@@ -2,90 +2,56 @@
 
 ![](https://github.com/MitchellMalleo/VAProgressCircle/blob/master/vaProgressCircle.gif)
 
----
+## Description
 
-## Example Setup
+VAProgressCircle is a custom loading animation for loading iOS content from 0 to 100%.
 
-1. Clone the repo and drag the Classes folder into your project. This should include VAProgressCircle.h/.m, and UIProgressLabel.h/.m
-2. Either create a VAProgressCircle using the `- (id)initWithFrame:(CGRect)frame` method or drag and drop a UIView into your Interface Builder, subclass it to VAProgressCircle, and link it up to a property in your UIViewController
+## Requirements
 
-Here is the snippet of code slightly modified from the example app included in the repo. This shows how to initalize and add a VAProgressChart to your UIViewController using `- (id)initWithFrame:(CGRect)frame`
+- ARC
+- iOS 5.0+
 
-	self.circleChart = [[VAProgressCircle alloc] initWithFrame:CGRectMake(50, 60, 250, 250)];
-	[self.view addSubview:self.circleChart];
+## Installation
 
-## Documentation
-___
+1. VAProgressCircle can be installed via [Cocoapods](http://cocoapods.org/) by adding `pod 'VAProgressCircle'` to your podfile, or you can manually add `UICountingLabel.h/.m` and `VAProgressCircle.h/.m` into your project.
+2. Either create a VAProgressCircle by using a UIView in your Interface Builder, subclassing it to VAProgressCircle, and linking it up to a property in your UIViewController or by using `- (id)initWithFrame:(CGRect)frame`
 
-## General
-1. VAProgressChart only supports opaque colors at the current release. Using any non-opaque colors could cause unwanted behavior
+    ```
+    self.progressCircle = [[VAProgressCircle alloc] initWithFrame:CGRectMake(50, 60, 250, 250)];
+[self.view addSubview:self.circleChart];
+    ```
 
-## Methods
+## Usage
+Set the base color of your VAProgressCircle.
 
-##### - (void)setProgress:(int)progress <br/>
-The bread and butter method. Takes the current state of the VAProgressCircle and updates the circle to the progress that was passed
+	[self.progressCircle setColor:[UIColor greenColor]];
+	
+	//Or you can specify a highlight color with your base color
 
-##### - (void)setColor:(UIColor *)color <br/>
-Sets the color for all the relevant properties of the circle. This includes circleColor, accentLineColor, and numberLabelColor. Also sets the circleHighlightColor by taking the `(UIColor *)color` and making it 20% lighter
+	[self.progressCircle setColor:[UIColor greenColor] withHighlightColor:VADefaultGreen];
 
-##### - (void)setTransitionColor:(UIColor * )transitionColor <br/>
-Sets the transition color for all the relevant properties of the circle. This includes circleTransitionColor, accentLineTransitionColor, and numberLabelTransitionColor. Also sets the circleHighlightTransitionColor by taking the `(UIColor *)transitionColor` and making it 20% lighter
+VAProgressCircle has the ability to transition from one color to another as it reaches 100%. This can be enabled by setting your `transitionType`.
 
-##### - (void)setColor:(UIColor * )color withHighlightColor:(UIColor *)highlightColor <br/>
-Functions similar to `- (void)setColor:(UIColor *)color` but allows the specification of a highlightColor
+	self.progressCircle.transitionType = VAProgressCircleColorTransitionTypeGradual;
 
-##### - (void)setTransitionColor:(UIColor * )color withHighlightTransitionColor:(UIColor *)highlightColor <br/>
-Functions similar to `- (void)setTransitionColor:(UIColor *)transitionColor` but allows the specification of a highlightColor
+Set the transition color of your VAProgressCircle.
 
-<br/>
+	[self.progressCircle setTransitionColor:[UIColor blueColor]];
+	
+	//Or you can specify a highlight color with your transition color
 
-## Properties
+	[self.progressCircle setColor:[UIColor blueColor] withHighlightTransitionColor:VADefaultBlue];	
 
-##### VAProgressCircleColorTransitionType transitionType <br/>
-Should be set to `VAProgressCircleColorTransitionTypeGradual` if you want the spinner to transition to a second color as it approaches 100%. Defaults to `VAProgressCircleColorTransitionTypeNone`
+Toggle animation features of the VAProgressCircle.
 
-##### VAProgressCircleRotationDirection rotationDirection <br/>
-Designates which way the progress will rotate around the VAProgressChart. Defaults to `VAProgressCircleRotationDirectionCounterClockwise`
+	@property BOOL shouldShowAccentLine;
+	@property BOOL shouldShowFinishedAccentCircle;
+	@property BOOL shouldHighlightProgress;
+	@property BOOL shouldNumberLabelTransition;
 
-##### float animationSpeed <br/>
-Designates how fast the animation should animate. Defaults to `1.0f`
+Set the rotation direction of your VAProgressCircle.
 
-##### BOOL shouldShowAccentLine <br/>
-Designates whether or not an accent line should be allocated and animated every time a progress piece reaches the outer circle. Defaults to `YES`
-
-##### BOOL shouldShowFinishedAccentCircle <br/>
-Designates whether or not the VAProgressCircle will create a full accent circle when it reaches 100%. Defaults to `YES`
-
-##### BOOL shouldHighlightProgress <br/>
-Designates whether or not a progress piece will highlight when it reaches the outer circle. Defaults to `YES`
-
-##### BOOL shouldNumberLabelTransition <br/>
-If transitionType is set to `VAProgressCircleColorTransitionTypeGradual`, shouldNumberLabelTransition specifies if the number label should change color along with the rest of the VAProgressCircle. Defaults to `YES` 
-
-##### UIColor *circleColor <br/>
-Designates what color the outer circle should be. Defaults to `VADefaultGreen`
-
-##### UIColor *accentLineColor <br/>
-Designates what color line the VAProgressCircle generates as a progress piece reaches the outer circle. Defaults to `VADefaultGreen`
-
-##### UIColor *numberLabelColor <br/>
-Designates the color of the number label. Defaults to `VADefaultGreen`
-
-##### UIColor *circleHighlightColor <br/>
-Designates the highlight color of the progress pieces if `shouldHighlightProgress` is set to `YES`. Defaults to `VADefaultGreen`
-
-##### UIColor *circleTransitionColor <br/>
-Designates what color the outer circle should transition to as it approaches 100%. Defaults to `VADefaultBlue`
-
-##### UIColor *accentLineTransitionColor <br/>
-Designates what color line the VAProgressCircle generates should transition to as it approaches 100%. Defaults to `VADefaultBlue`
-
-##### UIColor *numberLabelTransitionColor <br/>
-Designates the color of the number label should transition to as it approaches 100%. Defaults to `VADefaultBlue`
-
-##### UIColor *circleHighlightTransitionColor <br/>
-Designates the transition highlight color of the progress pieces as the VAProgressCircle approaches 100% if `shouldHighlightProgress` is set to `YES`. Defaults to `VADefaultBlue`
-
+	self.progressCircle.rotationDirection = VAProgressCircleRotationDirectionClockwise;
 
 ## License
 
