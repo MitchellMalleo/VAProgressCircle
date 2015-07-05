@@ -26,11 +26,11 @@
 #define kProgressPieceLineIsFinishedNarrowAnimation @"lineIsFinishedNarrowAnimation"
 #define kProgressPieceLineIsFinishedRetractAnimation @"lineIsFinishedRetractAnimation"
 
-typedef enum{
+typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     UIColorRed = 0,
     UIColorGreen = 1,
     UIColorBlue = 2
-} UIColorRGBIndex;
+};
 
 @interface VAProgressCircle()
 
@@ -57,7 +57,7 @@ typedef enum{
 
 #pragma mark - Lifecycle
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     
@@ -71,7 +71,7 @@ typedef enum{
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     

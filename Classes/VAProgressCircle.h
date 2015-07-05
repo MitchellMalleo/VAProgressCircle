@@ -9,22 +9,21 @@
 #import <UIKit/UIKit.h>
 
 #define VADefaultGreen [UIColor colorWithRed:35.0/255.0 green:177.0/255.0 blue:70.0/255.0 alpha:1.0f]
-
 #define VADefaultBlue [UIColor colorWithRed:32.0/255.0 green:149.0/255.0 blue:242.0/255.0 alpha:1.0f]
 
-typedef enum{
+typedef NS_ENUM(NSInteger, VAProgressCircleColorTransitionType){
     VAProgressCircleColorTransitionTypeGradual,
     VAProgressCircleColorTransitionTypeNone
-} VAProgressCircleColorTransitionType;
+};
 
-typedef enum{
+typedef NS_ENUM(NSInteger, VAProgressCircleRotationDirection){
     VAProgressCircleRotationDirectionClockwise,
     VAProgressCircleRotationDirectionCounterClockwise
-} VAProgressCircleRotationDirection;
+};
 
 @interface VAProgressCircle : UIView <UIApplicationDelegate>
 
-- (id)initWithFrame:(CGRect)frame;
+- (instancetype)initWithFrame:(CGRect)frame;
 - (void)setProgress:(int)progress;
 
 - (void)setColor:(UIColor *)color;

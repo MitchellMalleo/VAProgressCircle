@@ -11,18 +11,17 @@
 @interface MainViewController ()
 
 @property int circleProgress;
-@property (strong, nonatomic) VAProgressCircle *circleChart;
-@property (strong, nonatomic) NSTimer *randomTimer;
 
 @property (weak, nonatomic) IBOutlet UIButton *increaseButton;
 @property (weak, nonatomic) IBOutlet UIButton *randomButton;
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
-
 @property (weak, nonatomic) IBOutlet UIView *actionsView;
-
 @property (weak, nonatomic) IBOutlet UISegmentedControl *primaryColorSegmentedControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *transitionColorSegmentedControl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *progressChartTransitionTypeSegmentedControl;
+
+@property (strong, nonatomic) VAProgressCircle *circleChart;
+@property (strong, nonatomic) NSTimer *randomTimer;
 
 @end
 
