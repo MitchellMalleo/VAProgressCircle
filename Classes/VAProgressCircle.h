@@ -11,6 +11,8 @@
 #define VADefaultGreen [UIColor colorWithRed:35.0/255.0 green:177.0/255.0 blue:70.0/255.0 alpha:1.0f]
 #define VADefaultBlue [UIColor colorWithRed:32.0/255.0 green:149.0/255.0 blue:242.0/255.0 alpha:1.0f]
 
+typedef void (^VAProgressCircleProgressCompletionBlock)(int progress, BOOL isAnimationCompleteForProgress);
+
 typedef NS_ENUM(NSInteger, VAProgressCircleColorTransitionType){
     VAProgressCircleColorTransitionTypeGradual,
     VAProgressCircleColorTransitionTypeNone
@@ -50,5 +52,7 @@ typedef NS_ENUM(NSInteger, VAProgressCircleRotationDirection){
 
 @property (nonatomic) VAProgressCircleColorTransitionType transitionType;
 @property (nonatomic) VAProgressCircleRotationDirection rotationDirection;
+
+@property (copy, nonatomic) VAProgressCircleProgressCompletionBlock progressBlock;
 
 @end

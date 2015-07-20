@@ -40,7 +40,15 @@ Set the transition color of your VAProgressCircle.
 	
 	//Or you can specify a highlight color with your transition color
 
-	[self.progressCircle setColor:[UIColor blueColor] withHighlightTransitionColor:VADefaultBlue];	
+	[self.progressCircle setColor:[UIColor blueColor] withHighlightTransitionColor:VADefaultBlue];
+	
+Use the progessBlock to add functionality to execute before or after a progress piece has finished animating
+    
+    self.circleChart.progressBlock = ^(int progress, BOOL isAnimationCompleteForProgress){
+        
+        //Add custom block functionality here
+        
+    };
 
 Toggle animation features of the VAProgressCircle.
 

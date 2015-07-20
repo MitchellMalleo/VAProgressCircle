@@ -45,7 +45,8 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
 @property (strong, nonatomic) UIView *numberView;
 @property (strong, nonatomic) UIProgressLabel *numberLabel;
 
-@property (strong, nonatomic) NSMutableArray *progressPieceArray;
+@property (strong, nonatomic) NSMutableArray *preProgressPieceArray;
+@property (strong, nonatomic) NSMutableArray *postProgressPieceArray;
 @property (assign, nonatomic, getter = isFinished) BOOL finished;
 @property (nonatomic) CGFloat total;
 
@@ -109,7 +110,8 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     self.transitionType = VAProgressCircleColorTransitionTypeNone;
     self.rotationDirection = VAProgressCircleRotationDirectionCounterClockwise;
     
-    self.progressPieceArray = [[NSMutableArray alloc] init];
+    self.postProgressPieceArray = [[NSMutableArray alloc] init];
+    self.preProgressPieceArray = [[NSMutableArray alloc] init];
 }
 
 - (void)setupViews
@@ -174,8 +176,8 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     self.circleColor = color;
     self.accentLineColor = color;
     self.numberLabelColor = color;
-    self.numberLabel.textColor = self.numberLabelColor;
     self.circleHighlightColor = [self colorConvertedToRGBA:color isColorHighlightColor:YES];
+    [self transitionColorForProgressPieces];
 }
 
 - (void)setTransitionColor:(UIColor *)transitionColor
@@ -205,6 +207,11 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
 
 - (void)setProgress:(int)progress
 {
+    if(self.total == 100)
+    {
+        return;
+    }
+    
     CGFloat floatProgress = (CGFloat)progress;
     
     CAShapeLayer *progressPiece = [CAShapeLayer layer];
@@ -224,6 +231,13 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     
     progressPiece.backgroundColor = [UIColor whiteColor].CGColor;
     progressPiece.fillColor = [UIColor clearColor].CGColor;
+    
+    [self.preProgressPieceArray addObject:progressPiece];
+    
+    if(self.progressBlock)
+    {
+        self.progressBlock(progress, NO);
+    }
     
     CAShapeLayer *progressPieceLine = [CAShapeLayer layer];
     progressPieceLine.path = self.innerBackgroundPath.CGPath;
@@ -272,6 +286,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     increaseLineWidthAnimation.toValue = [NSNumber numberWithInt:self.frame.size.width / 12];
     [increaseLineWidthAnimation setValue:progressPiece forKey:kLayer];
     [increaseLineWidthAnimation setValue:kProgressPieceIncreaseLineWidthAnimation forKey:kName];
+    [increaseLineWidthAnimation setValue:[NSNumber numberWithFloat:self.total] forKey:kCurrent];
     
     CABasicAnimation *innerToOuterMoveAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
     innerToOuterMoveAnimation.delegate = self;
@@ -283,6 +298,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     innerToOuterMoveAnimation.toValue = (id)self.backgroundCirclePath.CGPath;
     [innerToOuterMoveAnimation setValue:progressPiece forKey:kLayer];
     [innerToOuterMoveAnimation setValue:kProgressPieceInnerToOuterMoveAnimation forKey:kName];
+    [innerToOuterMoveAnimation setValue:[NSNumber numberWithFloat:self.total] forKey:kCurrent];
     
     CABasicAnimation *flashStartAnimation = [CABasicAnimation animationWithKeyPath:@"strokeColor"];
     flashStartAnimation.delegate = self;
@@ -335,11 +351,45 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
         [progressPiece addAnimation:innerToOuterMoveAnimation forKey:@"path"];
         [progressPiece addAnimation:increaseLineWidthAnimation forKey:@"lineWidth"];
         [progressPiece addAnimation:flashStartAnimation forKey:@"strokeColor"];
-        [progressPiece addAnimation:flashFadeAnimation forKey:@"strokeColorFade"];
+        
+        if(self.shouldHighlightProgress)
+        {
+            [progressPiece addAnimation:flashFadeAnimation forKey:@"strokeColorFade"];
+        }
     });
 }
 
 #pragma mark - Private Methods
+
+- (void)transitionColorForProgressPieces
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self.transitionType == VAProgressCircleColorTransitionTypeGradual)
+        {
+            for (CAShapeLayer *preProgressPiece in self.preProgressPieceArray)
+            {
+                preProgressPiece.strokeColor = [self transitionFromColor:self.numberLabelColor toColor:self.numberLabelTransitionColor WithProgress:self.total].CGColor;
+            }
+            
+            if(self.shouldNumberLabelTransition)
+            {
+                self.numberLabel.textColor = [self transitionFromColor:self.numberLabelColor toColor:self.numberLabelTransitionColor WithProgress:self.total];
+            }
+        }
+        else
+        {
+            for (CAShapeLayer *preProgressPiece in self.preProgressPieceArray)
+            {
+                preProgressPiece.strokeColor = self.circleColor.CGColor;
+            }
+            
+            if(self.shouldNumberLabelTransition)
+            {
+                self.numberLabel.textColor = self.numberLabelColor;
+            }
+        }
+    });
+}
 
 - (void)invertPathToOppositeRotationDirection:(UIBezierPath *)path
 {
@@ -397,7 +447,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
         transitionColor = [self colorConvertedToRGBA:transitionColor isColorHighlightColor:NO];
         const CGFloat *colorComponents = CGColorGetComponents(originalColor.CGColor);
         const CGFloat *transitionColorComponents = CGColorGetComponents(transitionColor.CGColor);
-    
+        
         CGFloat red = transitionColorComponents[UIColorRed] * progressPercentage + colorComponents[UIColorRed] * progressPercentageInversion;
         CGFloat green = transitionColorComponents[UIColorGreen] * progressPercentage + colorComponents[UIColorGreen] * progressPercentageInversion;
         CGFloat blue = transitionColorComponents[UIColorBlue] * progressPercentage + colorComponents[UIColorBlue] * progressPercentageInversion;
@@ -414,34 +464,42 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
 
 - (void)addProgressPieceLine:(CAShapeLayer *)progressPieceLine withCurrent:(float)current
 {
-    BOOL shouldAnimateFullCircle = (current == [[NSNumber numberWithInt:100] floatValue]);
+    BOOL progressCircleIsComplete = (current == [[NSNumber numberWithInt:100] floatValue]);
     
-    CABasicAnimation *lineMoveAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-    lineMoveAnimation.delegate = self;
-    lineMoveAnimation.beginTime = 0.0f;
-    lineMoveAnimation.duration = 0.8;
-    lineMoveAnimation.speed = self.animationSpeed;
-    lineMoveAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.1 :0.33 :0.33 :0.33];
-    lineMoveAnimation.fromValue = (id)self.innerBackgroundPath.CGPath;
-    lineMoveAnimation.toValue = (id)self.outerBackgroundPath.CGPath;
-    [lineMoveAnimation setValue:progressPieceLine forKey:kLayer];
-    [lineMoveAnimation setValue:kProgressPieceLineMoveAnimation forKey:kName];
+    CABasicAnimation *lineMoveAnimation;
+    CABasicAnimation *lineFadeAnimation;
     
-    CABasicAnimation *lineFadeAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    lineFadeAnimation.delegate = self;
-    lineFadeAnimation.beginTime = CACurrentMediaTime() + 0.3f / self.animationSpeed;
-    lineFadeAnimation.duration = 0.8;
-    lineFadeAnimation.speed = self.animationSpeed;
-    lineFadeAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    lineFadeAnimation.fromValue = [NSNumber numberWithInt:1.0];
-    lineFadeAnimation.toValue = [NSNumber numberWithInt:0.1];
-    [lineFadeAnimation setValue:progressPieceLine forKey:kLayer];
-    [lineFadeAnimation setValue:kProgressPieceLineFadeAnimation forKey:kName];
+    if(self.shouldShowAccentLine)
+    {
+        lineMoveAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+        lineMoveAnimation.delegate = self;
+        lineMoveAnimation.beginTime = 0.0f;
+        lineMoveAnimation.duration = 0.8;
+        lineMoveAnimation.speed = self.animationSpeed;
+        lineMoveAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.1 :0.33 :0.33 :0.33];
+        lineMoveAnimation.fromValue = (id)self.innerBackgroundPath.CGPath;
+        lineMoveAnimation.toValue = (id)self.outerBackgroundPath.CGPath;
+        [lineMoveAnimation setValue:progressPieceLine forKey:kLayer];
+        [lineMoveAnimation setValue:kProgressPieceLineMoveAnimation forKey:kName];
+        [lineMoveAnimation setValue:[NSNumber numberWithFloat:current] forKey:kCurrent];
+        
+        lineFadeAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        lineFadeAnimation.delegate = self;
+        lineFadeAnimation.beginTime = CACurrentMediaTime() + 0.3f / self.animationSpeed;
+        lineFadeAnimation.duration = 0.8;
+        lineFadeAnimation.speed = self.animationSpeed;
+        lineFadeAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        lineFadeAnimation.fromValue = [NSNumber numberWithInt:1.0];
+        lineFadeAnimation.toValue = [NSNumber numberWithInt:0.1];
+        [lineFadeAnimation setValue:progressPieceLine forKey:kLayer];
+        [lineFadeAnimation setValue:kProgressPieceLineFadeAnimation forKey:kName];
+        [lineFadeAnimation setValue:[NSNumber numberWithFloat:current] forKey:kCurrent];
+    }
     
     CABasicAnimation *lineIsFinishedNarrowAnimation;
     CABasicAnimation *lineIsFinishedRetractAnimation;
     
-    if(shouldAnimateFullCircle && self.shouldShowFinishedAccentCircle)
+    if(progressCircleIsComplete && self.shouldShowFinishedAccentCircle)
     {
         lineMoveAnimation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.33 :0.88 :0.33 :0.88];
         
@@ -467,18 +525,22 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
         [lineIsFinishedRetractAnimation setValue:progressPieceLine forKey:kLayer];
         [lineIsFinishedRetractAnimation setValue:kProgressPieceLineIsFinishedRetractAnimation forKey:kName];
     }
+    else if(progressCircleIsComplete)
+    {
+        self.progressBlock(current, YES);
+    }
     
     [self.progressPieceView.layer addSublayer:progressPieceLine];
     
     dispatch_async(dispatch_get_main_queue(), ^(void){
         
-        if(shouldAnimateFullCircle && self.shouldShowFinishedAccentCircle)
+        if(progressCircleIsComplete && self.shouldShowFinishedAccentCircle)
         {
             [progressPieceLine addAnimation:lineMoveAnimation forKey:@"path"];
             [progressPieceLine addAnimation:lineIsFinishedNarrowAnimation forKey:@"lineWidth"];
             [progressPieceLine addAnimation:lineIsFinishedRetractAnimation forKey:@"pathRetract"];
         }
-        else
+        else if(self.shouldShowAccentLine)
         {
             [progressPieceLine addAnimation:lineMoveAnimation forKey:@"path"];
             [progressPieceLine addAnimation:lineFadeAnimation forKey:@"opacity"];
@@ -493,7 +555,6 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     NSString *name = [anim valueForKey:kName];
     CAShapeLayer *progressLayer = [anim valueForKey:kLayer];
     
-    
     if([name  isEqualToString:kProgressPieceInnerToOuterMoveAnimation])
     {
         progressLayer.path = self.backgroundCirclePath.CGPath;
@@ -507,15 +568,16 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
         NSNumber *current = [anim valueForKey:kCurrent];
         
         CAShapeLayer *progressPieceLine = [progressLayer valueForKey:kLine];
-
+        
         if(self.transitionType == VAProgressCircleColorTransitionTypeGradual)
         {
-            for (CAShapeLayer *pastProgressPiece in self.progressPieceArray)
+            for (CAShapeLayer *pastProgressPiece in self.postProgressPieceArray)
             {
                 pastProgressPiece.strokeColor = progressLayer.strokeColor;
             }
             
-            [self.progressPieceArray addObject:progressLayer];
+            [self.preProgressPieceArray removeObject:progressLayer];
+            [self.postProgressPieceArray addObject:progressLayer];
         }
         
         if(self.transitionType == VAProgressCircleColorTransitionTypeGradual && self.shouldNumberLabelTransition)
@@ -527,9 +589,9 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
             [self.numberLabel setTextColor:self.numberLabelColor];
         }
         
-        if(self.shouldShowAccentLine)
+        if(self.shouldShowAccentLine || (self.shouldShowFinishedAccentCircle && [current intValue] == 100))
         {
-           [self addProgressPieceLine:progressPieceLine withCurrent:[current floatValue]];
+            [self addProgressPieceLine:progressPieceLine withCurrent:[current floatValue]];
         }
         
         if(self.transitionType == VAProgressCircleColorTransitionTypeGradual && self.shouldHighlightProgress)
@@ -557,7 +619,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
         
         if(self.transitionType == VAProgressCircleColorTransitionTypeGradual)
         {
-            for (CAShapeLayer *pastProgressPiece in self.progressPieceArray)
+            for (CAShapeLayer *pastProgressPiece in self.postProgressPieceArray)
             {
                 pastProgressPiece.strokeColor = [self transitionFromColor:self.circleColor toColor:self.circleTransitionColor WithProgress:[current floatValue]].CGColor;
             }
@@ -591,10 +653,23 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
 {
     NSString *name = [anim valueForKey:kName];
     CAShapeLayer *progressLayer = [anim valueForKey:kLayer];
+    NSNumber *current = [anim valueForKey:kCurrent];
     
     if([name isEqualToString:kProgressPieceLineIsFinishedRetractAnimation])
     {
         [progressLayer removeFromSuperlayer];
+        
+        if(self.progressBlock)
+        {
+            self.progressBlock([current  intValue], YES);
+        }
+    }
+    else if(([name isEqualToString:kProgressPieceInnerToOuterMoveAnimation] && !self.shouldHighlightProgress && !self.shouldShowAccentLine) || ([name isEqualToString:kProgressPieceFlashFadeAnimation] && !self.shouldShowAccentLine) || ([name isEqualToString:kProgressPieceLineFadeAnimation]))
+    {
+        if(self.progressBlock)
+        {
+            self.progressBlock([current  intValue], YES);
+        }
     }
 }
 

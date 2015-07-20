@@ -62,6 +62,7 @@
     [self setPrimaryColorForChart];
     [self setTransitionColorForChart];
     [self setTransitionTypeForChart];
+    [self setBlocksForChart];
     
     [self.view addSubview:self.circleChart];
 }
@@ -72,6 +73,15 @@
     {
         [self addProgress];
     }
+}
+
+- (void)setBlocksForChart
+{
+    self.circleChart.progressBlock = ^(int progress, BOOL isAnimationCompleteForProgress){
+        
+        //Add custom block functionality here
+        
+    };
 }
 
 - (void)addProgress
