@@ -45,8 +45,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
 @property (strong, nonatomic) UIView *numberView;
 @property (strong, nonatomic) UIProgressLabel *numberLabel;
 
-@property (strong, nonatomic) NSMutableArray *preProgressPieceArray;
-@property (strong, nonatomic) NSMutableArray *postProgressPieceArray;
+@property (strong, nonatomic) NSMutableArray *progressPieceArray;
 @property (assign, nonatomic, getter = isFinished) BOOL finished;
 @property (nonatomic) CGFloat total;
 
@@ -110,8 +109,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     self.transitionType = VAProgressCircleColorTransitionTypeNone;
     self.rotationDirection = VAProgressCircleRotationDirectionCounterClockwise;
     
-    self.postProgressPieceArray = [[NSMutableArray alloc] init];
-    self.preProgressPieceArray = [[NSMutableArray alloc] init];
+    self.progressPieceArray = [[NSMutableArray alloc] init];
 }
 
 - (void)setupViews
@@ -177,7 +175,6 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     self.accentLineColor = color;
     self.numberLabelColor = color;
     self.circleHighlightColor = [self colorConvertedToRGBA:color isColorHighlightColor:YES];
-    [self transitionColorForProgressPieces];
 }
 
 - (void)setTransitionColor:(UIColor *)transitionColor
@@ -231,8 +228,6 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     
     progressPiece.backgroundColor = [UIColor whiteColor].CGColor;
     progressPiece.fillColor = [UIColor clearColor].CGColor;
-    
-    [self.preProgressPieceArray addObject:progressPiece];
     
     if(self.progressBlock)
     {
@@ -360,36 +355,6 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
 }
 
 #pragma mark - Private Methods
-
-- (void)transitionColorForProgressPieces
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if(self.transitionType == VAProgressCircleColorTransitionTypeGradual)
-        {
-            for (CAShapeLayer *preProgressPiece in self.preProgressPieceArray)
-            {
-                preProgressPiece.strokeColor = [self transitionFromColor:self.numberLabelColor toColor:self.numberLabelTransitionColor WithProgress:self.total].CGColor;
-            }
-            
-            if(self.shouldNumberLabelTransition)
-            {
-                self.numberLabel.textColor = [self transitionFromColor:self.numberLabelColor toColor:self.numberLabelTransitionColor WithProgress:self.total];
-            }
-        }
-        else
-        {
-            for (CAShapeLayer *preProgressPiece in self.preProgressPieceArray)
-            {
-                preProgressPiece.strokeColor = self.circleColor.CGColor;
-            }
-            
-            if(self.shouldNumberLabelTransition)
-            {
-                self.numberLabel.textColor = self.numberLabelColor;
-            }
-        }
-    });
-}
 
 - (void)invertPathToOppositeRotationDirection:(UIBezierPath *)path
 {
@@ -571,13 +536,12 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
         
         if(self.transitionType == VAProgressCircleColorTransitionTypeGradual)
         {
-            for (CAShapeLayer *pastProgressPiece in self.postProgressPieceArray)
+            for (CAShapeLayer *pastProgressPiece in self.progressPieceArray)
             {
                 pastProgressPiece.strokeColor = progressLayer.strokeColor;
             }
             
-            [self.preProgressPieceArray removeObject:progressLayer];
-            [self.postProgressPieceArray addObject:progressLayer];
+            [self.progressPieceArray addObject:progressLayer];
         }
         
         if(self.transitionType == VAProgressCircleColorTransitionTypeGradual && self.shouldNumberLabelTransition)
@@ -619,7 +583,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
         
         if(self.transitionType == VAProgressCircleColorTransitionTypeGradual)
         {
-            for (CAShapeLayer *pastProgressPiece in self.postProgressPieceArray)
+            for (CAShapeLayer *pastProgressPiece in self.progressPieceArray)
             {
                 pastProgressPiece.strokeColor = [self transitionFromColor:self.circleColor toColor:self.circleTransitionColor WithProgress:[current floatValue]].CGColor;
             }

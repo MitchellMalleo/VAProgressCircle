@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "VAProgressCircle"
-  s.version          = "0.0.3"
+  s.version          = "0.0.4"
   s.summary          = "A custom loading bar for iOS"
   s.homepage         = "https://github.com/MitchellMalleo/VAProgressCircle"
   s.license          = 'MIT'
