@@ -174,6 +174,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     self.circleColor = color;
     self.accentLineColor = color;
     self.numberLabelColor = color;
+    self.numberLabel.textColor = self.numberLabelColor;
     self.circleHighlightColor = [self colorConvertedToRGBA:color isColorHighlightColor:YES];
 }
 
