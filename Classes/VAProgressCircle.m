@@ -205,7 +205,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
 
 - (void)setProgress:(int)progress
 {
-    if(self.total >= 100 || progress == self.total || progress < self.total)
+    if(self.total >= 100 || progress == self.total || progress < self.total || progress > 100)
     {
         return;
     }
