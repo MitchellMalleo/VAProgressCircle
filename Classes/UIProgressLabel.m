@@ -39,15 +39,14 @@
 
 - (void)countToNumber:(int)number
 {
-    if(number > [self.text intValue])
+    if(number > [self.text intValue] && number <= 100)
     {
         self.text = [NSString stringWithFormat:@"%i", self.countUpToNumber];
         self.currentNumber = self.countUpToNumber;
+        self.countUpToNumber = number;
+        
+        [[NSRunLoop mainRunLoop] addTimer:self.countUpTimer forMode:NSDefaultRunLoopMode];
     }
-    
-    self.countUpToNumber = number;
-    
-    [[NSRunLoop mainRunLoop] addTimer:self.countUpTimer forMode:NSDefaultRunLoopMode];
 }
 
 #pragma mark - Private Methods

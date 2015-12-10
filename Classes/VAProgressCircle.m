@@ -205,7 +205,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
 
 - (void)setProgress:(int)progress
 {
-    if(self.total == 100)
+    if(self.total >= 100 || progress == self.total || progress < self.total)
     {
         return;
     }
@@ -215,7 +215,7 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     CAShapeLayer *progressPiece = [CAShapeLayer layer];
     progressPiece.path = self.numberViewPath.CGPath;
     progressPiece.strokeStart = self.total / 100;
-    progressPiece.strokeEnd = (floatProgress / 100) + 0.0004;
+    progressPiece.strokeEnd = (floatProgress / 100) + 0.0005;
     progressPiece.lineWidth = [[NSNumber numberWithInt:self.frame.size.width / 100] floatValue];
     
     if(self.transitionType == VAProgressCircleColorTransitionTypeGradual)

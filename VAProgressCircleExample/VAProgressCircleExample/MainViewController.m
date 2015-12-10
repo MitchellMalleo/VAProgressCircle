@@ -44,9 +44,9 @@
 {
     [self addChart];
     
-    self.actionsView.layer.shadowRadius = 4.0;
+    self.actionsView.layer.shadowRadius = 2.0;
     self.actionsView.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.actionsView.layer.shadowOpacity = 0.5f;
+    self.actionsView.layer.shadowOpacity = 0.2f;
     self.actionsView.clipsToBounds = NO;
     
     self.primaryColorSegmentedControl.apportionsSegmentWidthsByContent = YES;
@@ -57,8 +57,9 @@
 
 - (void)addChart
 {
-    self.circleChart = [[VAProgressCircle alloc] initWithFrame:CGRectMake(80, 80, 200, 200)];
-    self.circleChart.center = CGPointMake(self.view.center.x, self.circleChart.center.y);
+    CGRect mainFrame = [[UIScreen mainScreen] bounds];
+    
+    self.circleChart = [[VAProgressCircle alloc] initWithFrame:CGRectMake(mainFrame.size.width / 2 - 100, mainFrame.size.height / 4 - 80, 200, 200)];
     [self setPrimaryColorForChart];
     [self setTransitionColorForChart];
     [self setTransitionTypeForChart];
