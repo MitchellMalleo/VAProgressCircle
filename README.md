@@ -50,7 +50,7 @@ Use the progessBlock to add functionality to execute before or after a progress 
         
     };
     
-If you need the delegate pattern, do not implement the block and set your delegate and they will get called insead
+If you need the delegate pattern, do not implement the block and set your delegate and they will get called instead
 
 	- (void)viewDidLoad
 	{
