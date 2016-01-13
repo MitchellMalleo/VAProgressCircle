@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "VAProgressCircle.h"
 
-@interface MainViewController : UIViewController
+@interface MainViewController : UIViewController <VAProgressCircleDelegate>
 
 @end

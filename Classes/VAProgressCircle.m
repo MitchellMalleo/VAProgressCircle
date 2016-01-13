@@ -234,6 +234,10 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
     {
         self.progressBlock(progress, NO);
     }
+    else if(self.delegate)
+    {
+        [self.delegate progressCircle:self willAnimateToProgress:progress];
+    }
     
     CAShapeLayer *progressPieceLine = [CAShapeLayer layer];
     progressPieceLine.path = self.innerBackgroundPath.CGPath;
@@ -491,9 +495,13 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
         [lineIsFinishedRetractAnimation setValue:progressPieceLine forKey:kLayer];
         [lineIsFinishedRetractAnimation setValue:kProgressPieceLineIsFinishedRetractAnimation forKey:kName];
     }
-    else if(progressCircleIsComplete)
+    else if(progressCircleIsComplete && self.progressBlock)
     {
         self.progressBlock(current, YES);
+    }
+    else if (progressCircleIsComplete && self.delegate)
+    {
+        [self.delegate progressCircle:self didAnimateToProgress:current];
     }
     
     [self.progressPieceView.layer addSublayer:progressPieceLine];
@@ -628,12 +636,20 @@ typedef NS_ENUM(NSInteger, UIColorRGBIndex){
         {
             self.progressBlock([current  intValue], YES);
         }
+        else if(self.delegate)
+        {
+            [self.delegate progressCircle:self didAnimateToProgress:[current intValue]];
+        }
     }
     else if(([name isEqualToString:kProgressPieceInnerToOuterMoveAnimation] && !self.shouldHighlightProgress && !self.shouldShowAccentLine) || ([name isEqualToString:kProgressPieceFlashFadeAnimation] && !self.shouldShowAccentLine) || ([name isEqualToString:kProgressPieceLineFadeAnimation]))
     {
         if(self.progressBlock)
         {
             self.progressBlock([current  intValue], YES);
+        }
+        else if(self.delegate)
+        {
+            [self.delegate progressCircle:self didAnimateToProgress:[current intValue]];
         }
     }
 }

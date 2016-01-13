@@ -63,7 +63,8 @@
     [self setPrimaryColorForChart];
     [self setTransitionColorForChart];
     [self setTransitionTypeForChart];
-    [self setBlocksForChart];
+    //self.circleChart.delegate = self;
+    //[self setBlocksForChart];
     
     [self.view addSubview:self.circleChart];
 }
@@ -242,6 +243,18 @@
 - (IBAction)progressChartTransitionTypeSegmentedControlWasTouched:(id)sender
 {
     [self setTransitionTypeForChart];
+}
+
+#pragma mark - VAProgressCircleDelegate
+
+- (void)progressCircle:(VAProgressCircle *)circle willAnimateToProgress:(int)progress
+{
+    NSLog(@"will animate to progress %i", progress);
+}
+
+- (void)progressCircle:(VAProgressCircle *)circle didAnimateToProgress:(int)progress
+{
+    NSLog(@"did animate to progress %i", progress);
 }
 
 @end

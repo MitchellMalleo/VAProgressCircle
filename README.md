@@ -49,6 +49,25 @@ Use the progessBlock to add functionality to execute before or after a progress 
         //Add custom block functionality here
         
     };
+    
+If you need the delegate pattern, do not implement the block and set your delegate and they will get called insead
+
+	- (void)viewDidLoad
+	{
+    	self.progressCircle.delegate = self;
+	}
+	
+	#pragma mark - VAProgressCircleDelegate
+
+    - (void)progressCircle:(VAProgressCircle *)circle willAnimateToProgress:(int)progress
+	{
+    	//Add custom delegate functionality here
+	}
+
+	- (void)progressCircle:(VAProgressCircle *)circle didAnimateToProgress:(int)progress
+	{
+    	//Add custom delegate functionality here
+	}
 
 Toggle animation features of the VAProgressCircle.
 

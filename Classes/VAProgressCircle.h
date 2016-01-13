@@ -11,6 +11,15 @@
 #define VADefaultGreen [UIColor colorWithRed:35.0/255.0 green:177.0/255.0 blue:70.0/255.0 alpha:1.0f]
 #define VADefaultBlue [UIColor colorWithRed:32.0/255.0 green:149.0/255.0 blue:242.0/255.0 alpha:1.0f]
 
+@class VAProgressCircle;
+
+@protocol VAProgressCircleDelegate <NSObject>
+
+- (void)progressCircle:(VAProgressCircle *)circle willAnimateToProgress:(int)progress;
+- (void)progressCircle:(VAProgressCircle *)circle didAnimateToProgress:(int)progress;
+
+@end
+
 typedef void (^VAProgressCircleProgressCompletionBlock)(int progress, BOOL isAnimationCompleteForProgress);
 
 typedef NS_ENUM(NSInteger, VAProgressCircleColorTransitionType){
@@ -39,7 +48,7 @@ typedef NS_ENUM(NSInteger, VAProgressCircleRotationDirection){
 @property (strong, nonatomic) UIColor *accentLineColor;
 @property (strong, nonatomic) UIColor *numberLabelColor;
 @property (strong, nonatomic) UIColor *circleHighlightColor;
-
+                        
 @property (strong, nonatomic) UIColor *circleTransitionColor;
 @property (strong, nonatomic) UIColor *accentLineTransitionColor;
 @property (strong, nonatomic) UIColor *numberLabelTransitionColor;
@@ -54,5 +63,7 @@ typedef NS_ENUM(NSInteger, VAProgressCircleRotationDirection){
 @property (nonatomic) VAProgressCircleRotationDirection rotationDirection;
 
 @property (copy, nonatomic) VAProgressCircleProgressCompletionBlock progressBlock;
+
+@property (weak, nonatomic) id<VAProgressCircleDelegate> delegate;
 
 @end
