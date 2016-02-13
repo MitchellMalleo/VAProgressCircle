@@ -13,7 +13,7 @@ VAProgressCircle is a custom loading animation for loading iOS content from 0 to
 
 ## Installation
 
-1. VAProgressCircle can be installed via [Cocoapods](http://cocoapods.org/) by adding `pod 'VAProgressCircle'` to your podfile, or you can manually add `UICountingLabel.h/.m` and `VAProgressCircle.h/.m` into your project.
+1. VAProgressCircle can be installed via [CocoaPods](http://cocoapods.org/) by adding `pod 'VAProgressCircle'` to your podfile, or you can manually add `UICountingLabel.h/.m` and `VAProgressCircle.h/.m` into your project.
 2. Either create a VAProgressCircle by using a UIView in your Interface Builder, subclassing it to VAProgressCircle, and linking it up to a property in your UIViewController or by using `- (id)initWithFrame:(CGRect)frame`
 
     ```
