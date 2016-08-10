@@ -199,6 +199,8 @@
 				TargetAttributes = {
 					33D04BA51B03DAF400AA0BFC = {
 						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = GAKU93VB2D;
+						DevelopmentTeamName = "Mitchell Malleo (Personal Team)";
 					};
 					33D04BBE1B03DAF400AA0BFC = {
 						CreatedOnToolsVersion = 6.3;
